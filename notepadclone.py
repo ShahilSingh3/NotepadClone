@@ -1,5 +1,6 @@
 from tkinter import *
 r=Tk()
+#Function to adjust textbox size to always match the window size
 def text_adjust(event):
     global textarea
     main_geometry=r.geometry()
