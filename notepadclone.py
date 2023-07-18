@@ -8,6 +8,9 @@ def text_adjust(event):
     main_geometry=main_geometry[0]
     main_geometry=main_geometry.split('x')
     textarea.config(width=main_geometry[0],height=main_geometry[1])
+menubar=Menu(r)
+filemenu=Menu(menubar)
+filemenu.place(x=1,anchor=NW)
 filemenu=Button(r,text="File",borderwidth=0,width=6)
 filemenu.place(x=1,anchor=NW)
 editmenu=Button(r,text="Edit",borderwidth=0,width=6)
