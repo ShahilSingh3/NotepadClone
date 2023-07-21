@@ -15,12 +15,14 @@ def text_adjust(event):
 def openfile():
     global filename
     f=fd.askopenfile(mode='r+',filetypes=[('Text File','.txt')],initialdir='/')
-    maintext=f.read()
-    textarea.insert(1.0,maintext)
-    filename=f.name
-    print(filename)
-    f.close()
+    if f != None:
+        maintext=f.read()
+        textarea.insert(1.0,maintext)
+        filename=f.name
+        print(filename)
+        f.close()
 def savefile():
+    maintext=textarea.get(1.0,END)
     pass
 menubar=Menu(r)
 filemenu=Menu(menubar,tearoff=0)
