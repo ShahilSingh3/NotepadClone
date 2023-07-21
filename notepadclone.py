@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox as mg
 from tkinter import filedialog as fd
+import os
 r=Tk()
 global maintext
 #Function to adjust textbox size to always match the window size
@@ -12,13 +13,19 @@ def text_adjust(event):
     main_geometry=main_geometry.split('x')
     textarea.config(width=main_geometry[0],height=main_geometry[1])
 def openfile():
-    f=fd.askopenfile(mode='r',filetypes=[('Text File','.txt')])
+    global filename
+    f=fd.askopenfile(mode='r+',filetypes=[('Text File','.txt')],initialdir='/')
     maintext=f.read()
-    print(maintext)
+    textarea.insert(1.0,maintext)
+    filename=f.name
+    print(filename)
+    f.close()
+def savefile():
+    pass
 menubar=Menu(r)
 filemenu=Menu(menubar,tearoff=0)
 filemenu.add_command(label="Open",command=openfile)
-filemenu.add_command(label="Save")
+filemenu.add_command(label="Save",command=savefile)
 filemenu.add_command(label="Save As")
 filemenu.add_separator()
 filemenu.add_command(label="Exit")
