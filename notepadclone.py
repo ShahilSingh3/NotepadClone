@@ -1,7 +1,6 @@
 from tkinter import *
 from tkinter import messagebox as mg
 from tkinter import filedialog as fd
-import os
 r=Tk()
 global maintext
 #Function to adjust textbox size to always match the window size
@@ -19,18 +18,54 @@ def openfile():
         maintext=f.read()
         textarea.insert(1.0,maintext)
         filename=f.name
-        print(filename)
         f.close()
 def savefile():
+    global filename
     maintext=textarea.get(1.0,END)
-    pass
+    try:
+        print(filename)
+        f=open('w',filename)
+        f.write(maintext)
+        f.close()
+    except:
+        pass
+        # try:
+        #     filename=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
+        #     f=open('w',filename)
+        #     f.write(maintext)
+        #     f.close()
+        # except:
+        #     pass
+def saveasfile():
+    maintext=textarea.get(1.0,END)
+    filename=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
+    f=open('w',filename)
+    f.write(maintext)
+    f.close()
+def customquit():
+    maintext=textarea.get(1.0,END)
+    try:
+        filename
+        f=open('r',filename)
+        filetext=f.read()
+        f.close()
+        if(filetext==maintext):
+            r.destroy()
+        else:
+            confirm_save=Tk()
+            height=str(round(confirm_save.winfo_screenheight()/2-200))
+            width=str(round(confirm_save.winfo_screenwidth()/2-450))
+            confirm_save.geometry("700x200+"+width+"+"+height)
+            confirm_save.mainloop()
+    except:
+        pass
 menubar=Menu(r)
 filemenu=Menu(menubar,tearoff=0)
 filemenu.add_command(label="Open",command=openfile)
 filemenu.add_command(label="Save",command=savefile)
-filemenu.add_command(label="Save As")
+filemenu.add_command(label="Save As",command=saveasfile)
 filemenu.add_separator()
-filemenu.add_command(label="Exit")
+filemenu.add_command(label="Exit",command=customquit)
 editmenu=Menu(menubar,tearoff=0)
 editmenu.add_command(label="Undo")
 editmenu.add_separator()
