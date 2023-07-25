@@ -28,6 +28,7 @@ def savefile():
         f=open(filename,'w')
         f.write(maintext)
         f.close()
+    except:
         try:
             filename=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
             f=open(filename,'w')
@@ -35,8 +36,6 @@ def savefile():
             f.close()
         except:
             pass
-    except:
-        pass
 def saveasfile():
     maintext=textarea.get(1.0,END)
     filename=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
