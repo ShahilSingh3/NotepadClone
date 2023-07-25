@@ -1,5 +1,4 @@
 from tkinter import *
-from tkinter import messagebox as mg
 from tkinter import filedialog as fd
 r=Tk()
 global maintext
@@ -11,6 +10,7 @@ def text_adjust(event):
     main_geometry=main_geometry[0]
     main_geometry=main_geometry.split('x')
     textarea.config(width=main_geometry[0],height=main_geometry[1])
+#Function to open the file and replace textbox text
 def openfile():
     global filename
     f=fd.askopenfile(mode='r+',filetypes=[('Text File','.txt')],initialdir='/')
@@ -20,6 +20,7 @@ def openfile():
         textarea.insert(1.0,maintext)
         filename=f.name
         f.close()
+#Function to save the text to a file
 def savefile():
     maintext=textarea.get(1.0,END)
     try:
@@ -27,7 +28,6 @@ def savefile():
         f=open(filename,'w')
         f.write(maintext)
         f.close()
-    except:
         try:
             filename=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
             f=open(filename,'w')
@@ -35,6 +35,8 @@ def savefile():
             f.close()
         except:
             pass
+    except:
+        pass
 def saveasfile():
     maintext=textarea.get(1.0,END)
     filename=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
