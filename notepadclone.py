@@ -30,8 +30,8 @@ def savefile():
         f.close()
     except:
         try:
-            filename=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
-            f=open(filename,'w')
+            file_name=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
+            f=open(file_name,'w')
             f.write(maintext)
             f.close()
         except:
