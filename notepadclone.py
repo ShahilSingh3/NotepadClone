@@ -16,26 +16,25 @@ def openfile():
     f=fd.askopenfile(mode='r+',filetypes=[('Text File','.txt')],initialdir='/')
     if f != None:
         maintext=f.read()
+        textarea.delete(1.0,END)
         textarea.insert(1.0,maintext)
         filename=f.name
         f.close()
 def savefile():
-    global filename
     maintext=textarea.get(1.0,END)
     try:
-        print(filename)
-        f=open('w',filename)
+        filename
+        f=open(filename,'w')
         f.write(maintext)
         f.close()
     except:
-        pass
-        # try:
-        #     filename=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
-        #     f=open('w',filename)
-        #     f.write(maintext)
-        #     f.close()
-        # except:
-        #     pass
+        try:
+            filename=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
+            f=open(filename,'w')
+            f.write(maintext)
+            f.close()
+        except:
+            pass
 def saveasfile():
     maintext=textarea.get(1.0,END)
     filename=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
@@ -43,20 +42,21 @@ def saveasfile():
     f.write(maintext)
     f.close()
 def customquit():
-    maintext=textarea.get(1.0,END)
+    # maintext=textarea.get(1.0,END)
     try:
-        filename
-        f=open('r',filename)
-        filetext=f.read()
-        f.close()
-        if(filetext==maintext):
-            r.destroy()
-        else:
-            confirm_save=Tk()
-            height=str(round(confirm_save.winfo_screenheight()/2-200))
-            width=str(round(confirm_save.winfo_screenwidth()/2-450))
-            confirm_save.geometry("700x200+"+width+"+"+height)
-            confirm_save.mainloop()
+        pass
+    #     filename
+    #     f=open('r',filename)
+    #     filetext=f.read()
+    #     f.close()
+    #     if(filetext==maintext):
+    #         r.destroy()
+    #     else:
+    #         confirm_save=Tk()
+    #         height=str(round(confirm_save.winfo_screenheight()/2-200))
+    #         width=str(round(confirm_save.winfo_screenwidth()/2-450))
+    #         confirm_save.geometry("700x200+"+width+"+"+height)
+    #         confirm_save.mainloop()
     except:
         pass
 menubar=Menu(r)
