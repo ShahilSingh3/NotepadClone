@@ -39,27 +39,77 @@ def savefile():
 def saveasfile():
     maintext=textarea.get(1.0,END)
     filename=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
-    f=open('w',filename)
+    f=open(filename,'w')
     f.write(maintext)
     f.close()
 def customquit():
-    # maintext=textarea.get(1.0,END)
+    maintext=textarea.get(1.0,END)
     try:
-        pass
-    #     filename
-    #     f=open('r',filename)
-    #     filetext=f.read()
-    #     f.close()
-    #     if(filetext==maintext):
-    #         r.destroy()
-    #     else:
-    #         confirm_save=Tk()
-    #         height=str(round(confirm_save.winfo_screenheight()/2-200))
-    #         width=str(round(confirm_save.winfo_screenwidth()/2-450))
-    #         confirm_save.geometry("700x200+"+width+"+"+height)
-    #         confirm_save.mainloop()
+        filename
+        f=open(filename,'r')
+        filetext=f.read()
+        f.close()
+        if(filetext==maintext):
+            r.destroy()
+        else:
+            confirm_save=Tk()
+            def confirmdontsave():
+                confirm_save.destroy()
+                r.destroy()
+            def confirmsave():
+                f=open(filename,'w')
+                f.write(maintext)
+                f.close()
+                confirm_save.destroy()
+                r.destroy()
+            ce_text=Label(confirm_save,text="Would you like to save your changes?",font=('Segoe UI',12))
+            ce_yes=Button(confirm_save,text='Save',width=15,borderwidth=0.5,command=confirmsave)
+            ce_no=Button(confirm_save,text="Don't Save",width=15,borderwidth=0.5,command=confirmdontsave)
+            ce_cancel=Button(confirm_save,text="Cancel",width=15,borderwidth=0.5,command=confirm_save.destroy)
+            ce_text.place(relx=0.5,rely=0.2,anchor=CENTER)
+            ce_yes.place(relx=0.2,rely=0.6,anchor=CENTER)
+            ce_no.place(relx=0.5,rely=0.6,anchor=CENTER)
+            ce_cancel.place(relx=0.8,rely=0.6,anchor=CENTER)
+            height=str(round(confirm_save.winfo_screenheight()/2-200))
+            width=str(round(confirm_save.winfo_screenwidth()/2-450))
+            confirm_save.geometry("600x125+"+width+"+"+height)
+            confirm_save.resizable(False,False)
+            confirm_save.title("Confirm Exit")
+            confirm_save.mainloop()
     except:
-        pass
+        alt_maintext=maintext.strip()
+        if(alt_maintext==''):
+            r.destroy()
+        else:
+            confirm_save=Tk()
+            def confirmdontsave():
+                confirm_save.destroy()
+                r.destroy()
+            def confirmsave():
+                filename=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
+                if filename!=None:
+                    f=open(filename,'w')
+                    f.write(maintext)
+                    f.close()
+                    confirm_save.destroy()
+                    r.destroy()
+                else:
+                    confirm_save.destroy()
+            ce_text=Label(confirm_save,text="Would you like to save your changes?",font=('Segoe UI',12))
+            ce_yes=Button(confirm_save,text='Save',width=15,borderwidth=0.5,command=confirmsave)
+            ce_no=Button(confirm_save,text="Don't Save",width=15,borderwidth=0.5,command=confirmdontsave)
+            ce_cancel=Button(confirm_save,text="Cancel",width=15,borderwidth=0.5,command=confirm_save.destroy)
+            ce_text.place(relx=0.5,rely=0.2,anchor=CENTER)
+            ce_yes.place(relx=0.2,rely=0.6,anchor=CENTER)
+            ce_no.place(relx=0.5,rely=0.6,anchor=CENTER)
+            ce_cancel.place(relx=0.8,rely=0.6,anchor=CENTER)
+            height=str(round(confirm_save.winfo_screenheight()/2-200))
+            width=str(round(confirm_save.winfo_screenwidth()/2-450))
+            confirm_save.geometry("600x125+"+width+"+"+height)
+            confirm_save.resizable(False,False)
+            confirm_save.title("Confirm Exit")
+            confirm_save.mainloop()
+ 
 menubar=Menu(r)
 filemenu=Menu(menubar,tearoff=0)
 filemenu.add_command(label="Open",command=openfile)
