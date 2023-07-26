@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import filedialog as fd
 r=Tk()
 global maintext
+global filename
+
 #Function to adjust textbox size to always match the window size
 def text_adjust(event):
     global textarea
@@ -12,29 +14,32 @@ def text_adjust(event):
     textarea.config(width=main_geometry[0],height=main_geometry[1])
 #Function to open the file and replace textbox text
 def openfile():
-    global filename
-    f=fd.askopenfile(mode='r+',filetypes=[('Text File','.txt')],initialdir='/')
+    f = fd.askopenfile(mode='r+',filetypes=[('Text File','.txt')],initialdir='/')
     if f != None:
-        maintext=f.read()
+        maintext = f.read()
         textarea.delete(1.0,END)
         textarea.insert(1.0,maintext)
-        filename=f.name
+        filename = f.name
         f.close()
 #Function to save the text to a file
 def savefile():
     maintext=textarea.get(1.0,END)
+    f1 = filename
     try:
-        filename
-        f=open(filename,'w')
+        f1
+        print("HEllo")
+        f = open(f1,'w')
         f.write(maintext)
         f.close()
     except:
         try:
-            file_name=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
-            f=open(file_name,'w')
+            f1 = fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
+            f = open(f1,'w')
+            print("World")
             f.write(maintext)
             f.close()
         except:
+            print("Didn't work")
             pass
 def saveasfile():
     maintext=textarea.get(1.0,END)
