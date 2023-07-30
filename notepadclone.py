@@ -1,10 +1,11 @@
 from tkinter import *
 from tkinter import filedialog as fd
 r=Tk()
-global userinput
-global maintext
+global userinput,maintext,redoinput,redoid
 inputid=0
+redoid=0
 userinput={}
+redoinput={}
 #Function to adjust textbox size to always match the window size
 def text_adjust(event):
     global textarea
@@ -125,6 +126,8 @@ def storekey(event):
     if(len(userinput)>200):
         del userinput[min(userinput)]
 def undo():
+    global redoid
+    redoid+=1
     if(userinput!={}):
         maintext=textarea.get(1.0,END)
         undochar=userinput[max(userinput)]
@@ -132,14 +135,40 @@ def undo():
         maintext=maintext[::-1]
         del userinput[max(userinput)]
         textarea.delete(1.0,END)
-        textarea.insert(1.0,maintext)
+        textarea.insert(1.0,maintext.rstrip("\n"))
+        redoinput[redoid]=undochar
+        if(len(redoinput)>200):
+            del redoinput[min(redoinput)]
 def undoevent(event):
+    global redoid
+    redoid+=1
     if(userinput!={}):
         maintext=textarea.get(1.0,END)
         undochar=userinput[max(userinput)]
         maintext=maintext[::-1].replace(undochar,'',1)
         maintext=maintext[::-1]
         del userinput[max(userinput)]
+        textarea.delete(1.0,END)
+        textarea.insert(1.0,maintext.rstrip("\n"))
+        redoinput[redoid]=undochar
+        if(len(redoinput)>200):
+            del redoinput[min(redoinput)]
+def redo():
+    if(redoinput!={}):
+        maintext=textarea.get(1.0,END)
+        maintext=maintext.rstrip("\n")
+        redochar=redoinput[max(redoinput)]
+        maintext=maintext+redochar
+        del redoinput[max(redoinput)]
+        textarea.delete(1.0,END)
+        textarea.insert(1.0,maintext)
+def redoevent(event):
+    if(redoinput!={}):
+        maintext=textarea.get(1.0,END)
+        maintext=maintext.rstrip("\n")
+        redochar=redoinput[max(redoinput)]
+        maintext=maintext+redochar
+        del redoinput[max(redoinput)]
         textarea.delete(1.0,END)
         textarea.insert(1.0,maintext)
 menubar=Menu(r)
@@ -151,6 +180,7 @@ filemenu.add_separator()
 filemenu.add_command(label="Exit",command=customquit)
 editmenu=Menu(menubar,tearoff=0)
 editmenu.add_command(label="Undo",command=undo)
+editmenu.add_command(label="Redo",command=redo)
 editmenu.add_separator()
 editmenu.add_command(label="Cut")
 editmenu.add_command(label="Copy")
@@ -171,6 +201,7 @@ textarea=Text(r,borderwidth=0)
 textarea.pack()
 textarea.bind("<Key>",storekey)
 textarea.bind("<Control-z>",undoevent)
+textarea.bind("<Control-y>",redoevent)
 r.title("Notepad Clone")
 r.geometry('900x500')
 r.mainloop()
