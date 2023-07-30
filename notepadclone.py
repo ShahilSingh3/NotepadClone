@@ -1,7 +1,10 @@
 from tkinter import *
 from tkinter import filedialog as fd
 r=Tk()
+global userinput
 global maintext
+inputid=0
+userinput={}
 #Function to adjust textbox size to always match the window size
 def text_adjust(event):
     global textarea
@@ -114,6 +117,31 @@ def customquit():
             confirm_save.resizable(False,False)
             confirm_save.title("Confirm Exit")
             confirm_save.mainloop()
+def storekey(event):
+    if(event.char!=''):
+        global inputid
+        inputid+=1
+        userinput[inputid]=event.char
+    if(len(userinput)>200):
+        del userinput[min(userinput)]
+def undo():
+    if(userinput!={}):
+        maintext=textarea.get(1.0,END)
+        undochar=userinput[max(userinput)]
+        maintext=maintext[::-1].replace(undochar,'',1)
+        maintext=maintext[::-1]
+        del userinput[max(userinput)]
+        textarea.delete(1.0,END)
+        textarea.insert(1.0,maintext)
+def undoevent(event):
+    if(userinput!={}):
+        maintext=textarea.get(1.0,END)
+        undochar=userinput[max(userinput)]
+        maintext=maintext[::-1].replace(undochar,'',1)
+        maintext=maintext[::-1]
+        del userinput[max(userinput)]
+        textarea.delete(1.0,END)
+        textarea.insert(1.0,maintext)
 menubar=Menu(r)
 filemenu=Menu(menubar,tearoff=0)
 filemenu.add_command(label="Open",command=openfile)
@@ -122,7 +150,7 @@ filemenu.add_command(label="Save As",command=saveasfile)
 filemenu.add_separator()
 filemenu.add_command(label="Exit",command=customquit)
 editmenu=Menu(menubar,tearoff=0)
-editmenu.add_command(label="Undo")
+editmenu.add_command(label="Undo",command=undo)
 editmenu.add_separator()
 editmenu.add_command(label="Cut")
 editmenu.add_command(label="Copy")
@@ -141,6 +169,8 @@ r.config(menu=menubar)
 r.bind('<Configure>',text_adjust)
 textarea=Text(r,borderwidth=0)
 textarea.pack()
+textarea.bind("<Key>",storekey)
+textarea.bind("<Control-z>",undoevent)
 r.title("Notepad Clone")
 r.geometry('900x500')
 r.mainloop()
