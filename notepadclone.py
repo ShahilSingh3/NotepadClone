@@ -23,6 +23,7 @@ def openfile():
 #Function to save the text to a file
 def savefile():
     maintext=textarea.get(1.0,END)
+    maintext=maintext.rstrip()
     try:
         filename
         f=open(filename,'w')
@@ -38,6 +39,7 @@ def savefile():
             pass
 def saveasfile():
     maintext=textarea.get(1.0,END)
+    maintext=maintext.rstrip()
     filename=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
     f=open(filename,'w')
     f.write(maintext)
@@ -45,10 +47,13 @@ def saveasfile():
 def customquit():
     maintext=textarea.get(1.0,END)
     try:
+        global filename
         filename
         f=open(filename,'r')
         filetext=f.read()
         f.close()
+        maintext=maintext.rstrip()
+        filetext=filetext.rstrip()
         if(filetext==maintext):
             r.destroy()
         else:
@@ -87,7 +92,7 @@ def customquit():
                 r.destroy()
             def confirmsave():
                 filename=fd.asksaveasfilename(defaultextension='.txt',filetypes=[('Text File','.txt'),('HTML','.html'),('All Files','.*')])
-                if filename!=None:
+                if(filename!=''):
                     f=open(filename,'w')
                     f.write(maintext)
                     f.close()
@@ -109,7 +114,6 @@ def customquit():
             confirm_save.resizable(False,False)
             confirm_save.title("Confirm Exit")
             confirm_save.mainloop()
- 
 menubar=Menu(r)
 filemenu=Menu(menubar,tearoff=0)
 filemenu.add_command(label="Open",command=openfile)
