@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import filedialog as fd
 r=Tk()
-global userinput,maintext,redoinput,redoid
+global userinput,maintext,redoinput,redoid,copytext,cuttext
 inputid=0
 redoid=0
 userinput={}
@@ -171,6 +171,17 @@ def redoevent(event):
         del redoinput[max(redoinput)]
         textarea.delete(1.0,END)
         textarea.insert(1.0,maintext)
+def cut():
+    cuttext=textarea.get(SEL_FIRST,SEL_LAST)
+    cuttext=cuttext.rstrip("\n")
+    textarea.delete(SEL_FIRST,SEL_LAST)
+    r.clipboard_append(cuttext)
+    r.update()
+def copy():
+    copytext=textarea.get(SEL_FIRST,SEL_LAST)
+    copytext=copytext.rstrip("\n")
+    r.clipboard_append(copytext)
+    r.update()
 menubar=Menu(r)
 filemenu=Menu(menubar,tearoff=0)
 filemenu.add_command(label="Open",command=openfile)
@@ -182,8 +193,8 @@ editmenu=Menu(menubar,tearoff=0)
 editmenu.add_command(label="Undo",command=undo)
 editmenu.add_command(label="Redo",command=redo)
 editmenu.add_separator()
-editmenu.add_command(label="Cut")
-editmenu.add_command(label="Copy")
+editmenu.add_command(label="Cut",command=cut)
+editmenu.add_command(label="Copy",command=copy)
 editmenu.add_command(label="Paste")
 editmenu.add_command(label="Delete")
 editmenu.add_separator()
