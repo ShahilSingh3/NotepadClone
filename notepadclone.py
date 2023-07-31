@@ -122,55 +122,51 @@ def storekey(event):
     if(event.char!=''):
         global inputid
         inputid+=1
-        userinput[inputid]=event.char
-    if(len(userinput)>200):
+        undotext=textarea.get(1.0,END)
+        undotext=undotext.rstrip("\n")
+        userinput[inputid]=undotext
+    if(len(userinput)>150):
         del userinput[min(userinput)]
 def undo():
     global redoid
     redoid+=1
     if(userinput!={}):
-        maintext=textarea.get(1.0,END)
         undochar=userinput[max(userinput)]
-        maintext=maintext[::-1].replace(undochar,'',1)
-        maintext=maintext[::-1]
-        del userinput[max(userinput)]
         textarea.delete(1.0,END)
-        textarea.insert(1.0,maintext.rstrip("\n"))
+        textarea.insert(1.0,undochar.rstrip("\n"))
         redoinput[redoid]=undochar
+        del userinput[max(userinput)]
         if(len(redoinput)>200):
             del redoinput[min(redoinput)]
 def undoevent(event):
     global redoid
     redoid+=1
     if(userinput!={}):
-        maintext=textarea.get(1.0,END)
+        redoinput[redoid]=textarea.get(1.0,END).strip("\n")
         undochar=userinput[max(userinput)]
-        maintext=maintext[::-1].replace(undochar,'',1)
-        maintext=maintext[::-1]
-        del userinput[max(userinput)]
         textarea.delete(1.0,END)
-        textarea.insert(1.0,maintext.rstrip("\n"))
-        redoinput[redoid]=undochar
+        textarea.insert(1.0,undochar.rstrip("\n"))
+        del userinput[max(userinput)]
         if(len(redoinput)>200):
             del redoinput[min(redoinput)]
 def redo():
+    global inputid
     if(redoinput!={}):
-        maintext=textarea.get(1.0,END)
-        maintext=maintext.rstrip("\n")
         redochar=redoinput[max(redoinput)]
-        maintext=maintext+redochar
-        del redoinput[max(redoinput)]
         textarea.delete(1.0,END)
-        textarea.insert(1.0,maintext)
+        textarea.insert(1.0,redochar)
+        inputid+=1
+        userinput[inputid]=redochar
+        del redoinput[max(redoinput)]
 def redoevent(event):
+    global inputid
     if(redoinput!={}):
-        maintext=textarea.get(1.0,END)
-        maintext=maintext.rstrip("\n")
         redochar=redoinput[max(redoinput)]
-        maintext=maintext+redochar
-        del redoinput[max(redoinput)]
         textarea.delete(1.0,END)
-        textarea.insert(1.0,maintext)
+        textarea.insert(1.0,redochar)
+        inputid+=1
+        userinput[inputid]=redochar
+        del redoinput[max(redoinput)]
 def cut():
     cuttext=textarea.get(SEL_FIRST,SEL_LAST)
     cuttext=cuttext.rstrip("\n")
@@ -182,6 +178,12 @@ def copy():
     copytext=copytext.rstrip("\n")
     r.clipboard_append(copytext)
     r.update()
+def paste():
+    clipboard=r.clipboard_get()
+    clipboard=clipboard.rstrip("\n")
+    textarea.insert(INSERT,clipboard)
+def delete():
+    textarea.delete(SEL_FIRST,SEL_LAST)
 menubar=Menu(r)
 filemenu=Menu(menubar,tearoff=0)
 filemenu.add_command(label="Open",command=openfile)
@@ -195,8 +197,8 @@ editmenu.add_command(label="Redo",command=redo)
 editmenu.add_separator()
 editmenu.add_command(label="Cut",command=cut)
 editmenu.add_command(label="Copy",command=copy)
-editmenu.add_command(label="Paste")
-editmenu.add_command(label="Delete")
+editmenu.add_command(label="Paste",command=paste)
+editmenu.add_command(label="Delete",command=delete)
 editmenu.add_separator()
 editmenu.add_command(label="Find")
 editmenu.add_command(label="Replace")
